@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: {sessions: 'users/sessions', registrations: 'users/registrations'}
-  root 'static_pages#home'
+	root 'static_pages#home'
+	get 'accounts/home'
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+	devise_for :users, controllers: { sessions: 'users/sessions', registrations: 'users/registrations' }
 end

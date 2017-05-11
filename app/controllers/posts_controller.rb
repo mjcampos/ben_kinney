@@ -11,6 +11,21 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
+    @comments = Comment.where(post_id: params[:id])
+    
+    if params[:commit] == "Submit"
+      @comment = Comment.new(body: params[:body], user_id: current_user.id, post_id: params[:id])
+
+      respond_to do |format|
+        if @comment.save
+          format.html { redirect_to @post, notice: "Comment was successfully created"}
+          format.json { render :show, status: :created, location: @post }
+        else
+          format.html { render :new }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+        end
+      end
+    end
   end
 
   # GET /posts/new
@@ -20,7 +35,7 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
-    if current_user.id != params[:id]
+    if current_user.id != Post.find(params[:id]).user_id
       redirect_to @post
     end
   end

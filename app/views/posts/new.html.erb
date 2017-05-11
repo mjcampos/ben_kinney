@@ -6,6 +6,8 @@
 		<p><%= current_user.about_me %></p>
 	<% end %>
 
+	<h3 class="text-center">New Post</h3>
+
 	<%= render 'form', post: @post %>
 
 	<%= link_to 'Back', posts_path %>

@@ -5,13 +5,13 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all.order('updated_at DESC')
+    @posts = Post.all.order('updated_at DESC').paginate(:page => params[:page])
   end
 
   # GET /posts/1
   # GET /posts/1.json
   def show
-    @comments = Comment.where(post_id: params[:id])
+    @comments = Comment.where(post_id: params[:id]).paginate(:page => params[:page])
     
     if params[:commit] == "Submit"
       @comment = Comment.new(body: params[:body], user_id: current_user.id, post_id: params[:id])
@@ -21,7 +21,7 @@ class PostsController < ApplicationController
           format.html { redirect_to @post, notice: "Comment was successfully created"}
           format.json { render :show, status: :created, location: @post }
         else
-          format.html { render :new }
+          format.html { redirect_to @post, alert: "Comment was not saved" }
           format.json { render json: @comment.errors, status: :unprocessable_entity }
         end
       end
